@@ -288,6 +288,21 @@ defmodule ExAIS.AisTest do
                  154, 176, 153, 224, 148, 195, 146>>
     end
 
+    test "decode class 25 with Destination" do
+      {:ok, sentence} =
+        NMEA.parse("!AIVDM,1,1,,B,I8Lg2:800000SBm@BLis@0O89h:1,0*0A")
+
+      {:ok, attr} = Ais.parse(sentence.payload, sentence.padding)
+      assert attr.msg_type == 25
+      assert attr.mmsi == "567001640"
+      assert attr.repeat_indicator == 0
+      assert attr.destination_indicator == 1
+      assert attr.destination_id == 0
+
+      assert attr.binary_data ==
+               <<141, 45, 80, 73, 204, 123, 64, 7, 200, 39, 2, 129>>
+    end
+
     test "decode class 26" do
       {:ok, sentence} =
         NMEA.parse("!AIVDM,1,1,,A,J1@@0IK70PGgT740000000000@000?D0ih1e00006JlPC9C3,0*6B")
