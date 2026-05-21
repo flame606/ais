@@ -891,31 +891,26 @@ defmodule ExAIS.Data.Ais do
       binary_data_flag: binary_data_flag
     }
 
-    # Add destination_id and spare if destination_indicator == 0 else ignore it
-    msg =
+    {msg, bindata} =
       if destination_indicator == 1 do
-        <<destination_id::30, spare::2>> = bindata
+        <<destination_id::30, spare::2, rest::bitstring>> = bindata
 
-        msg
-        |> Map.put(:destination_id, destination_id)
-        |> Map.put(:spare, spare)
+        {Map.merge(msg, %{destination_id: destination_id, spare: spare}), rest}
       else
-        msg
+        {msg, bindata}
       end
 
-    msg =
-      if binary_data_flag == 1 do
-        <<application_identifier::16, binary_data::bitstring>> = bindata
+    if binary_data_flag == 1 do
+      <<application_identifier::16, binary_data::bitstring>> = bindata
 
-        msg
-        |> Map.put(:application_identifier, application_identifier)
-        |> Map.put(:binary_data, binary_data)
-      else
-        <<binary_data::bitstring>> = bindata
-        Map.put(msg, :binary_data, binary_data)
-      end
-
-    msg
+      Map.merge(msg, %{
+        application_identifier: application_identifier,
+        binary_data: binary_data
+      })
+    else
+      <<binary_data::bitstring>> = bindata
+      Map.put(msg, :binary_data, binary_data)
+    end
   end
 
   # MULTIPLE SLOT BINARY MESSAGE WITH COMMUNICATIONS STATE (MESSAGE 26)
