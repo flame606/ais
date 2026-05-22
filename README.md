@@ -1,5 +1,10 @@
 # ExAIS
 
+[![CI](https://github.com/admarrs/ais/actions/workflows/ci.yml/badge.svg)](https://github.com/admarrs/ais/actions/workflows/ci.yml)
+[![License](https://img.shields.io/hexpm/l/exais.svg)](https://github.com/admarrs/exais/main/LICENSE.md)
+[![Version](https://img.shields.io/hexpm/v/exais.svg)](https://hex.pm/packages/exais)
+[![Hex Docs](https://img.shields.io/badge/documentation-gray.svg)](https://hexdocs.pm/exais)
+
 ExAIS is an Elixir library for decoding AIS (Automatic Identification System) data transmitted by vessels via NMEA 0183 v4.0 format sentences.
 
 ## Features
@@ -19,7 +24,7 @@ Add `exais` to your list of dependencies in `mix.exs`:
 ```elixir
 def deps do
   [
-    {:exais, "~> 0.2.2"}
+    {:exais, "~> 0.2.4"}
   ]
 end
 ```
